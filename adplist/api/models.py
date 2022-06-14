@@ -50,3 +50,7 @@ class Mentor(BaseUser):
     mentorship = models.ManyToManyField(MentorshipArea, related_name="mentorships")
     availability = ArrayField(models.DateTimeField(), blank=True, null=True)
     status = models.CharField(max_length=10, choices=STATUS, default="PENDING")
+
+
+class Member(BaseUser):
+    pass

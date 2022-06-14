@@ -1,6 +1,6 @@
 import factory
 
-from api.models import User, Mentor, MentorshipArea
+from api.models import User, Mentor, Member, MentorshipArea
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -26,8 +26,20 @@ class MentorFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     latitude = -15.7792
     longitude = -47.9341
-    employer = ""
-    title = ""
+    employer = "Company"
+    title = "Senior Developer"
     expertise = ["UI_UX", "PRODUCT"]
     mentorship = factory.RelatedFactoryList(MentorshipAreaFactory)
     status = "PENDING"
+
+
+class MemberFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Member
+
+    user = factory.SubFactory(UserFactory)
+    latitude = -15.7792
+    longitude = -47.9341
+    employer = "Company"
+    title = "Junior Developer"
+    expertise = ["AI"]
