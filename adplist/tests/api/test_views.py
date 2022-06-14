@@ -31,6 +31,31 @@ def test_get_mentor_all(client_api):
     assert response.data["count"] == 3
 
 
+@pytest.mark.parametrize(
+    "params, response_count",
+    [
+        ({"status": "APPROVED"}, 2),
+        ({"status": "PENDING"}, 1),
+        ({}, 3),
+    ],
+    ids=["Approved", "Pending", "Without params"],
+)
+def test_get_mentor_viewset_list_filtered_by_status(client_api, params, response_count):
+    url = reverse("mentor-list")
+
+    user_1 = UserFactory(username="User_1")
+    user_2 = UserFactory(username="User_2")
+    user_3 = UserFactory(username="User_3")
+
+    MentorFactory(user=user_1)
+    MentorFactory(user=user_2, status="APPROVED")
+    MentorFactory(user=user_3, status="APPROVED")
+
+    response = client_api.get(url, params)
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data["count"] == response_count
+
+
 def test_onboarding_mentor_view_set_not_authenticated(not_authenticated_user):
     url = reverse("onboarding-mentor")
     response = not_authenticated_user.get(url)
