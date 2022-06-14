@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  adplist_db:
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    container_name: pg_default
+    environment:
+      - POSTGRES_DB=pgadmin
+      - POSTGRES_USER=pgadmin
+      - POSTGRES_PASSWORD=pgadmin
+      - TZ=GMT
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - default
+
+volumes:
+  db_data:
