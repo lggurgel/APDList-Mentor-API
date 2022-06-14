@@ -10,11 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
-from pathlib import Path
-
 import django_heroku
 
-django_heroku.settings(locals())
+from pathlib import Path
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -181,3 +179,6 @@ CORS_ORIGIN_WHITELIST = (
 )
 
 CRSF_TRUSTED_ORIGINS = ["http://localhost:3000"]
+
+
+django_heroku.settings(locals())
