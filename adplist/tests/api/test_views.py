@@ -98,3 +98,29 @@ def test_views_not_authenticated(not_authenticated_user, endpoint):
     response = not_authenticated_user.get(url)
 
     assert response.status_code == status.HTTP_403_FORBIDDEN
+
+
+def test_member_onboarding_success(client_api, onboarding_member):
+    onboarding_url = reverse("onboarding-member")
+
+    client_api.post(onboarding_url, onboarding_member)
+
+    member_url = reverse("member-list")
+
+    response = client_api.get(member_url)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert [field in response.json()["results"][0] for field in onboarding_member]
+
+
+def test_mentor_onboarding_success(client_api, onboarding_mentor):
+    onboarding_url = reverse("onboarding-mentor")
+
+    client_api.post(onboarding_url, onboarding_mentor)
+
+    mentor_url = reverse("mentor-list")
+
+    response = client_api.get(mentor_url)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert [field in response.json()["results"][0] for field in onboarding_mentor]
