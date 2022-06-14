@@ -31,8 +31,8 @@ class BaseUser(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     latitude = models.FloatField()
     longitude = models.FloatField()
-    employer = title = models.CharField(max_length=100)
-    title = title = models.CharField(max_length=100)
+    employer = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
     expertise = ArrayField(models.CharField(max_length=50, choices=EXPERTISES))
 
     class Meta:

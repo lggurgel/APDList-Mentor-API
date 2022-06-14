@@ -1,2 +1,2 @@
 test:
-	pytest -x -s adplist
+	python -m pytest -x -s adplist
