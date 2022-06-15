@@ -124,3 +124,19 @@ def test_mentor_onboarding_success(client_api, onboarding_mentor):
 
     assert response.status_code == status.HTTP_200_OK
     assert [field in response.json()["results"][0] for field in onboarding_mentor]
+
+
+def test_update_other_profile_failure(client_member_api):
+    user = UserFactory(username="user")
+    MentorFactory(user=user)
+
+    url = reverse("user-detail", kwargs={"pk": user.id})
+
+    respose_get = client_member_api.get(url)
+    response_patch = client_member_api.patch(url, {"title": "Mid Level"})
+
+    assert respose_get.status_code == status.HTTP_200_OK
+    assert response_patch.status_code == status.HTTP_403_FORBIDDEN
+    assert response_patch.json() == {
+        "detail": "You do not have permission to perform this action."
+    }
