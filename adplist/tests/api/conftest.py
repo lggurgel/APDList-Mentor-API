@@ -4,7 +4,12 @@ from datetime import datetime, timedelta
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APIClient
 
-from tests.api.factories import UserFactory, MentorshipAreaFactory, MemberFactory
+from tests.api.factories import (
+    MentorFactory,
+    UserFactory,
+    MentorshipAreaFactory,
+    MemberFactory,
+)
 
 
 @pytest.fixture
@@ -26,6 +31,14 @@ def authenticated_member():
 
 
 @pytest.fixture
+def authenticated_mentor():
+    user = UserFactory()
+    MentorFactory(user=user)
+
+    return user
+
+
+@pytest.fixture
 def client_api(authenticated_user):
     client = APIClient()
     token = Token.objects.create(user=authenticated_user)
@@ -37,6 +50,14 @@ def client_api(authenticated_user):
 def client_member_api(authenticated_member):
     client = APIClient()
     token = Token.objects.create(user=authenticated_member)
+    client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
+    return client
+
+
+@pytest.fixture
+def client_mentor_api(authenticated_mentor):
+    client = APIClient()
+    token = Token.objects.create(user=authenticated_mentor)
     client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
     return client
 

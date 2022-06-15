@@ -1,3 +1,4 @@
+from typing import Any
 from rest_framework.generics import (
     CreateAPIView,
     ListAPIView,
@@ -5,7 +6,7 @@ from rest_framework.generics import (
 )
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 
-from api.filters import MentorFilterSet
+from api.filters import MentorFilterSet, MemberFilterSet
 from api.models import Mentor, Member, User
 from api.permissions import UpdatePermission
 from api.serializers import (
@@ -26,18 +27,24 @@ class MentorViewSet(ListAPIView):
 class MemberViewSet(ListAPIView):
     queryset = Member.objects.all()
     serializer_class = ReadOnlyMemberSerializer
+    filterset_class = MemberFilterSet
     ordering = ("-created_at",)
 
 
 class UserDetailAPIView(RetrieveUpdateAPIView):
     permission_classes = (UpdatePermission,)
+    user = None
+
+    def get_user(self, id):
+        if not self.user:
+            self.user = User.objects.get(id=id)
+        return self.user
 
     def get_queryset(self):
         id = self.kwargs["pk"]
-        user = User.objects.get(id=id)
 
-        if hasattr(user, "mentor"):
-            return Mentor.objects.get(user_id=id)
+        if hasattr(self.get_user(id), "mentor"):
+            return Mentor.objects.get(user_id=self.user.id)
 
         return Member.objects.get(user_id=id)
 
@@ -48,9 +55,9 @@ class UserDetailAPIView(RetrieveUpdateAPIView):
         return obj
 
     def get_serializer_class(self):
-        user = self.request.user
+        id = self.kwargs["pk"]
 
-        if hasattr(user, "mentor"):
+        if hasattr(self.get_user(id), "mentor"):
             return MentorSerializer
 
         return MemberSerializer

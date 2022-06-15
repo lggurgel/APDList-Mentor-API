@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model
+from typing import Union
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 
 from api.models import Member, Mentor
@@ -19,8 +19,8 @@ class MemberSerializer(ModelSerializer):
 class BaseReadOnlyUserSerializer(ModelSerializer):
     location = SerializerMethodField(read_only=True)
 
-    def get_location(self, obj):
-        return {"latitude": obj.latitude, "longitude": obj.longitude}
+    def get_location(self, obj: Union[Mentor, Member]):
+        return obj.location
 
 
 class ReadOnlyMemberSerializer(BaseReadOnlyUserSerializer):
