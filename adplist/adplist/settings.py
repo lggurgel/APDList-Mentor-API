@@ -183,7 +183,6 @@ AUTH_USER_MODEL = "api.User"
 django_heroku.settings(locals())
 
 CRSF_TRUSTED_ORIGINS = [
-    "http://localhost:3000",
-    "https://*.herokuapp.com",
-    "http://*.herokuapp.com",
+    "https://adplist.herokuapp.com",
+    "http://adplist.herokuapp.com",
 ]
