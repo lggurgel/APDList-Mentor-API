@@ -12,7 +12,7 @@
 # APDList Mentor API
 
 ### API Hosted on
-[HEROKU]https://adplist.herokuapp.com/)
+[HEROKU](https://adplist.herokuapp.com/)
 
 
 ### API Docs
