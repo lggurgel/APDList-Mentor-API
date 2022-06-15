@@ -178,6 +178,6 @@ CORS_ORIGIN_WHITELIST = (
     "http://localhost:8000",
 )
 
-CRSF_TRUSTED_ORIGINS = ["http://localhost:3000", "https://hemant-to-do.herokuapp.com"]
+CRSF_TRUSTED_ORIGINS = ["http://localhost:3000", "https://adplist.herokuapp.com"]
 
 django_heroku.settings(locals())
