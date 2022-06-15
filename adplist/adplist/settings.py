@@ -28,7 +28,7 @@ SECRET_KEY = "django-insecure-msp_)!3@7p))928ww)-e)2upvoew*60##1k1icpm%!@a+_a(#z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["herokuapp.com"]
+ALLOWED_HOSTS = ["http://*.herokuapp.com", "https://*.herokuapp.com"]
 
 
 # Application definition
@@ -179,6 +179,10 @@ CORS_ORIGIN_WHITELIST = (
     "https://adplist.herokuapp.com",
 )
 
-CRSF_TRUSTED_ORIGINS = ["http://localhost:3000", "https://adplist.herokuapp.com"]
+CRSF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "https://*.herokuapp.com",
+    "http://*.herokuapp.com",
+]
 
 django_heroku.settings(locals())
