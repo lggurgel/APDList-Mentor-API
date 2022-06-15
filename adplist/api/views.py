@@ -13,16 +13,17 @@ from rest_framework.status import (
 )
 
 from api.filters import MentorFilterSet, MemberFilterSet
-from api.models import Mentor, Member, User
-from api.permissions import UpdatePermission
+from api.models import Mentor, Member, User, BookingSchedule
+from api.permissions import UpdatePermission, IsMentorPermission
 from api.serializers import (
     MentorSerializer,
     MemberSerializer,
     ReadOnlyMemberSerializer,
     ReadOnlyMentorSerializer,
     MentorApproveSerializer,
+    BookingScheduleRegisterSerializer,
 )
-from api.use_case import MentorApproval
+from api.use_case import MentorApproval, BookScheduleAssociation
 
 
 class MentorViewSet(ListAPIView):
@@ -117,6 +118,36 @@ class MentorApproveViewSet(ListCreateAPIView):
         except Exception as e:
             return Response(
                 "Mentors approval error: {}".format(e),
+                HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+        return Response(serializer.errors, HTTP_400_BAD_REQUEST)
+
+
+class BokkingScheduleMentorCreateViewSet(CreateAPIView):
+    """API endpoint that allows mentor to register their own availabilities for mentorship."""
+
+    queryset = BookingSchedule.objects.all()
+    serializer_class = BookingScheduleRegisterSerializer
+    permission_classes = (IsMentorPermission,)
+
+    def post(self, request, *args, **kwargs):
+
+        obj = self.get_queryset()
+        self.check_object_permissions(self.request, obj)
+
+        try:
+            serializer = self.get_serializer(data=request.data)
+
+            if serializer.is_valid():
+                uc = BookScheduleAssociation()
+                uc.execute()
+
+                return Response(serializer.data, HTTP_200_OK)
+
+        except Exception as e:
+            return Response(
+                "Booking Scheduler Association Failed: {}".format(e),
                 HTTP_500_INTERNAL_SERVER_ERROR,
             )
 

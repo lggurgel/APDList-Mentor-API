@@ -255,3 +255,14 @@ def test_mentor_approval_bad_request(client_admin_api):
 
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert response.json() == {"ids": {"0": ["Must be a valid UUID."]}}
+
+
+def test_book_schedule_as_member_fail(client_member_api, booking_datetime):
+    url = reverse("mentor-booking-create")
+
+    response = client_member_api.post(url, booking_datetime)
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.json() == {
+        "detail": "You do not have permission to perform this action."
+    }

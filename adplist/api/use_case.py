@@ -14,3 +14,11 @@ class MentorApproval:
         for mentor in mentors_to_approval:
             mentor.status = "APPROVED"
             mentor.save(update_fields=["status"])
+
+
+class BookScheduleAssociation:
+    def __init__(self) -> None:
+        pass
+
+    def execute(self) -> None:
+        pass

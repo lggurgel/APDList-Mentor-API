@@ -5,9 +5,10 @@ from rest_framework.serializers import (
     Serializer,
     ListField,
     UUIDField,
+    DateTimeField,
 )
 
-from api.models import Member, Mentor
+from api.models import BookingSchedule, Member, Mentor
 
 
 class MentorSerializer(ModelSerializer):
@@ -43,3 +44,7 @@ class ReadOnlyMentorSerializer(BaseReadOnlyUserSerializer):
 
 class MentorApproveSerializer(Serializer):
     ids = ListField(child=UUIDField())
+
+
+class BookingScheduleRegisterSerializer(Serializer):
+    datetimes = ListField(child=DateTimeField())

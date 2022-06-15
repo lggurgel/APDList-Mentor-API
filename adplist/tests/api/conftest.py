@@ -111,3 +111,14 @@ def onboarding_mentor(authenticated_user):
         "availability": availability,
         "status": "PENDING",
     }
+
+
+@pytest.fixture
+def booking_datetime():
+    return {
+        "datetimes": [
+            "2022-06-15 13:00:00",
+            "2022-06-16 15:00:00",
+            "2022-06-17 16:00:00",
+        ]
+    }
