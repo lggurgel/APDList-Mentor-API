@@ -176,6 +176,7 @@ AUTH_USER_MODEL = "api.User"
 CORS_ORIGIN_WHITELIST = (
     "http://localhost:3000",
     "http://localhost:8000",
+    "https://adplist.herokuapp.com",
 )
 
 CRSF_TRUSTED_ORIGINS = ["http://localhost:3000", "https://adplist.herokuapp.com"]
