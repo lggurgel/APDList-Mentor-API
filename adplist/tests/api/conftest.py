@@ -39,6 +39,11 @@ def authenticated_mentor():
 
 
 @pytest.fixture
+def admin():
+    return UserFactory(is_staff=True)
+
+
+@pytest.fixture
 def client_api(authenticated_user):
     client = APIClient()
     token = Token.objects.create(user=authenticated_user)
@@ -58,6 +63,14 @@ def client_member_api(authenticated_member):
 def client_mentor_api(authenticated_mentor):
     client = APIClient()
     token = Token.objects.create(user=authenticated_mentor)
+    client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
+    return client
+
+
+@pytest.fixture
+def client_admin_api(admin):
+    client = APIClient()
+    token = Token.objects.create(user=admin)
     client.credentials(HTTP_AUTHORIZATION="Token " + token.key)
     return client
 

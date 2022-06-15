@@ -9,6 +9,7 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     id = factory.Faker("uuid4")
     name = factory.Faker("name")
+    is_staff = False
 
 
 class MentorshipAreaFactory(factory.django.DjangoModelFactory):

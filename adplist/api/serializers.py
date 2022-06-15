@@ -1,5 +1,11 @@
 from typing import Union
-from rest_framework.serializers import ModelSerializer, SerializerMethodField
+from rest_framework.serializers import (
+    ModelSerializer,
+    SerializerMethodField,
+    Serializer,
+    ListField,
+    UUIDField,
+)
 
 from api.models import Member, Mentor
 
@@ -33,3 +39,7 @@ class ReadOnlyMentorSerializer(BaseReadOnlyUserSerializer):
     class Meta:
         model = Mentor
         exclude = ("longitude", "latitude")
+
+
+class MentorApproveSerializer(Serializer):
+    ids = ListField(child=UUIDField())

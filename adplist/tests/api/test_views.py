@@ -194,3 +194,64 @@ def test_mentor_update_other_profile_failure(client_mentor_api):
     assert response_patch.json() == {
         "detail": "You do not have permission to perform this action."
     }
+
+
+def test_mentor_approval_not_allowed(client_mentor_api):
+    url = reverse("mentor-approve")
+
+    response = client_mentor_api.get(url)
+
+    assert response.status_code == status.HTTP_403_FORBIDDEN
+    assert response.json() == {
+        "detail": "You do not have permission to perform this action."
+    }
+
+
+def test_mentor_approval_allowed(client_admin_api):
+    url = reverse("mentor-approve")
+
+    user_1 = UserFactory(username="User_1")
+    user_2 = UserFactory(username="User_2")
+    user_3 = UserFactory(username="User_3")
+
+    MentorFactory(user=user_1, status="APPROVED")
+    MentorFactory(user=user_2)
+    MentorFactory(user=user_3)
+
+    response = client_admin_api.get(url)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert response.data["count"] == 2
+
+
+def test_mentor_approval_success(client_admin_api):
+    url = reverse("mentor-approve")
+
+    user_1 = UserFactory(username="User_1")
+    user_2 = UserFactory(username="User_2")
+    user_3 = UserFactory(username="User_3")
+
+    MentorFactory(user=user_1, status="APPROVED")
+
+    mentors_pending = [MentorFactory(user=user_2), MentorFactory(user=user_3)]
+
+    response = client_admin_api.post(
+        url, {"ids": [str(mentor.user.id) for mentor in mentors_pending]}
+    )
+
+    response_get = client_admin_api.get(url)
+
+    assert response_get.status_code == status.HTTP_200_OK
+    assert response_get.json()["count"] == 0
+
+    assert response.status_code == status.HTTP_200_OK
+    assert [mentor.status == "APPROVED" for mentor in mentors_pending]
+
+
+def test_mentor_approval_bad_request(client_admin_api):
+    url = reverse("mentor-approve")
+
+    response = client_admin_api.post(url, {"ids": ["fake_UUID"]})
+
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.json() == {"ids": {"0": ["Must be a valid UUID."]}}
