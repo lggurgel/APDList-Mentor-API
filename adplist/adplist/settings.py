@@ -29,7 +29,10 @@ SECRET_KEY = "django-insecure-msp_)!3@7p))928ww)-e)2upvoew*60##1k1icpm%!@a+_a(#z
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-
+CRSF_TRUSTED_ORIGINS = [
+    "https://adplist.herokuapp.com",
+    "http://adplist.herokuapp.com",
+]
 
 # Application definition
 
@@ -181,8 +184,3 @@ AUTH_USER_MODEL = "api.User"
 
 
 django_heroku.settings(locals())
-
-CRSF_TRUSTED_ORIGINS = [
-    "https://adplist.herokuapp.com",
-    "http://adplist.herokuapp.com",
-]
