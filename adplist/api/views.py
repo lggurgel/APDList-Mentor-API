@@ -26,6 +26,8 @@ from api.use_case import MentorApproval
 
 
 class MentorViewSet(ListAPIView):
+    """API endpoint that allows mentors to be listed."""
+
     queryset = Mentor.objects.all()
     serializer_class = ReadOnlyMentorSerializer
     filterset_class = MentorFilterSet
@@ -33,6 +35,8 @@ class MentorViewSet(ListAPIView):
 
 
 class MemberViewSet(ListAPIView):
+    """API endpoint that allows members to be listed."""
+
     queryset = Member.objects.all()
     serializer_class = ReadOnlyMemberSerializer
     filterset_class = MemberFilterSet
@@ -40,6 +44,8 @@ class MemberViewSet(ListAPIView):
 
 
 class UserDetailAPIView(RetrieveUpdateAPIView):
+    """API endpoint that allows users to be viewed or edited."""
+
     permission_classes = (UpdatePermission,)
     user = None
 
@@ -72,16 +78,22 @@ class UserDetailAPIView(RetrieveUpdateAPIView):
 
 
 class OnboardingMentorViewSet(CreateAPIView):
+    """API endpoint that allows users to be registered as Mentor."""
+
     queryset = Mentor.objects.all()
     serializer_class = MentorSerializer
 
 
 class OnboardingMemberViewSet(CreateAPIView):
+    """API endpoint that allows users to be registered as Member."""
+
     queryset = Mentor.objects.all()
     serializer_class = MemberSerializer
 
 
 class MentorApproveViewSet(ListCreateAPIView):
+    """API endpoint that allows Administrators approve PENDING Mentors."""
+
     STATUS = "PENDING"
     queryset = Mentor.objects.filter(status=STATUS)
     permission_classes = (IsAdminUser,)
