@@ -43,6 +43,22 @@ class BaseUser(models.Model):
         return {"latitude": self.latitude, "longitude": self.longitude}
 
 
+class Member(BaseUser):
+    pass
+
+
+class BookingSchedule(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    datetime = models.DateTimeField()
+    member = models.OneToOneField(
+        Member,
+        on_delete=models.SET_NULL,
+        related_name="booking_schedule",
+        blank=True,
+        null=True,
+    )
+
+
 class Mentor(BaseUser):
 
     STATUS = (("PENDING", "Pending"), ("APPROVED", "Approved"))
@@ -50,7 +66,10 @@ class Mentor(BaseUser):
     mentorship = models.ManyToManyField(MentorshipArea, related_name="mentorships")
     availability = ArrayField(models.DateTimeField(), blank=True, null=True)
     status = models.CharField(max_length=10, choices=STATUS, default="PENDING")
-
-
-class Member(BaseUser):
-    pass
+    booking = models.ForeignKey(
+        BookingSchedule,
+        on_delete=models.CASCADE,
+        related_name="mentor",
+        blank=True,
+        null=True,
+    )
